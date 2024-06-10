@@ -1,66 +1,85 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 30 days to learn Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+I'm going to show you how to study Laravel in 30 days with this course 
+[#https://laracasts.com/series/30-days-to-learn-laravel-11]
 
-## About Laravel
+1. [Introduction](#introduction)
+2. [Installation](#installation)
+3. [Routing](#routing)
+4. [Layouts and Components](#layouts-and-components)
+5. [Database](#database)
+6. [Migrations](#migrations)
+7. [Controllers](#controllers)
+8. [Models](#models)
+9. [Views](#views)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Introduction
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This is the readme for 30 days to learn Laravel. It covers the basics of Laravel and how to use it in practice.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Installation
 
-## Learning Laravel
+`xampp`
+`composer`
+`laravel`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Routing
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+To create a route in Laravel, use the `Route::get()` method. For example:
+```php
+Route::get('/contact', function (){
+    return view('contact');
+})
+```
+This route return a view to the page `contact.blade.php`.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Layouts and Components 
 
-## Laravel Sponsors
+To create a layout in Laravel, you can create a `layout.blade.php` file in the `resources/views` folder. To create a component in Laravel, you can create a `component.blade.php` file in the `resources/views/components` folder.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>30 days to learn | Laravel</title>
+</head>
+<body>
+    <!-- Your content here -->
+</body>
+</html>
+```
 
-### Premium Partners
+You can add `{{ $slot }}` to your component to display content in the layout.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```php
+<body>
+    {{ $slot }}
+</body>
+```
 
-## Contributing
+`{{ $slot }}` is the same as `<?php echo $slot; ?>`
+`$slot` is a variable that contains the content of the component.
+You can send data to the component in other files. For example: 
+`home.blade.php`
+```php
+<x-layout>
+    <h1>Slot data here!</h1>
+</x-layout>
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+`<x-layout>` is a special tag to include the `layout.blade.php` file in the component.
+Use "x" at the beginning of the tag with "-" and the name of the component -> `<x-component>`
 
-## Code of Conduct
+You can use the `@include('folder.component')` directive to add components to the layout. For example: 
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```php 
+<body>
+    @include('components.nav')
+    {{ $slot }}
+</body>
+```
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This will include the `nav` component of the `components` folder in the layout.
