@@ -83,3 +83,132 @@ You can use the `@include('folder.component')` directive to add components to th
 ```
 
 This will include the `nav` component of the `components` folder in the layout.
+
+You can add `{{ $attributes }}` to your component like in React with props
+
+```php
+<body 
+    {{ $attributes }}
+>
+    {{ $slot }}
+</body>
+```
+
+And if you want to add a custom content to yout component you can use `$<name>`
+
+```php	
+// components/title.blade.php
+<h1>
+    {{ $heading }}
+</h1>
+```
+
+And use like this: 
+
+```php
+<x-title>
+    <x-slot:heading>
+        30 days to learn Laravel
+    </x-slot:heading>
+</x-title>
+```
+
+Creating a `link` component: 
+
+1. create a simple component in the `resources/views/components` folder
+2. create a `link.blade.php` file in the `resources/views/components` folder
+3. add attributes and slot content
+```php
+<a {{$attributes}}>
+    {{$slot}}
+</a>
+```
+
+4. use like this:
+```php
+<x-link href="https://laravel.com">
+    Laravel
+</x-link>
+```
+
+5. Add a custom attribute/prop `active` to your component:
+
+```php
+@props(['active' => false])
+<a
+    class="{{$active ? 'active' : ''}}"
+    {{$attributes}}
+>
+    {{$slot}}
+</a>    
+```
+
+6. Example with `active` prop:
+
+```php
+<x-link
+    :active="request()->is('contact')"
+    href="https://laravel/contact.com"
+>
+    Contact
+</x-link>
+```
+
+Use `:` before the name of the prop to make it reactive(evaluates to `true` or `false`).
+
+If you not add `:` before the name of the prop, it will be always `true` because the prop will be a `string` evaluating to `true`.
+
+7. Be more specific with the `active` prop:
+
+```php
+<a
+    {{ $attributes->class([
+        'default classes',
+        'active' => url()->current() === $attributes->get('href'),
+    ]) }}
+>
+    Contact
+</a>
+```
+
+With this example, the `active` prop will be `true` if the current url is the same as the `href` prop.
+
+For exmple: 
+
+```php
+<x-link
+    href="https://laravel/contact"
+>
+    Contact
+</x-link>
+```
+
+Will add the class `active` to the link if the current url is the same as the `href` prop.
+
+### Custom components <x-nav-link>
+
+This is a custom component for creating navigation links.
+
+You can create a link using the 'a' type or a button using the 'button' type.
+
+The component uses `@props` to accept a 'type' prop which defaults to 'a'.
+
+The component uses `@switch` to switch between the two types:
+
+- In the 'a' type:
+  - The `href` attribute is set to the `href` prop or defaults to '#'.
+  - The 'active' class is added if the current url is the same as the `href`.
+  - The `aria-current` attribute is set to 'page' if active and 'false' if not.
+
+- In the 'button' type:
+  - The attributes are passed to the button element.
+
+The component uses `@php` to set the 'href' and 'active' variables.
+
+The component uses `@switch` to switch between the two types.
+
+The component uses `@break` to exit the switch statement.
+
+The component uses `@endswitch` to end the switch statement.
+
+See `resources/views/components/nav-link.blade.php` for implementation.
