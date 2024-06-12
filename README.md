@@ -212,3 +212,114 @@ The component uses `@break` to exit the switch statement.
 The component uses `@endswitch` to end the switch statement.
 
 See `resources/views/components/nav-link.blade.php` for implementation.
+
+### Day 6 | View Data and Route Wildcards
+
+Declare an array of jobs with fake data.
+
+```php
+$jobs = [
+    [
+        'id' => 1,
+        'title' => 'Laravel Developer',
+        'company' => 'Laravel',
+        'location' => 'Remote',
+        'description' => 'Full-time position for full-stack developers',
+        'salary' => '$50000',
+        'url' => 'https://laravel.com',
+        'date' => '2022-01-01'
+    ]
+];
+```
+
+Added a new route to `/jobs` that displays a list of jobs.
+
+`routes/web.php`
+```php
+Route::get('/jobs', function() use ($jobs){
+    return view('jobs', [
+            'jobs' => $jobs
+        ]
+    );
+});
+```
+Important, the `use ($jobs)` means that the `$jobs` variable will be available in the function, if you not use it the compilation will fail.
+
+Use a new directive `@foreach` to iterate each job in the `$jobs` array.
+`resources/views/jobs.blade.php`
+```php
+<x-layout>
+    <!-- ... -->
+    <section>
+            <ul>
+                @foreach ($jobs as $job)
+                <li>
+                    <!-- Content of $job here -->
+               </li>
+                @endforeach
+            </ul>
+    </section>
+</x-layout>
+```
+
+To display each attribute of the job use the `$job['name']` syntax.
+
+```php
+<!-- Inside of @foreach -->
+<li>
+    <h3>{{$job['title']}}</h3>
+    <p>{{$job['description']}}</p>
+    <span>{{$job['location']}}</span>
+    <span>{{$job['salary']}}</span>
+    <a href="{{$job['url']}}">Apply Now</a>
+</li>
+```
+
+Create a dinamic route to display a single job.
+
+`routes/web.php`
+```php
+Route::get('/jobs/{id}', function($id) use ($jobs){
+    $job = \Illuminate\Support\Arr::first($jobs, fn($job) => $job['id'] == $id);
+
+    return view('job', [
+        'job' => $job
+    ]);
+});
+```
+
+Pay attention to the `{id}` included in the route, it means that the id will be dinamic. For example, if the id is `1` it will be the first job in the array with the route `/jobs/1`. If the id is `2` it will be the second job in the array with the route `/jobs/2`.
+
+To display the data of the job you need to 'find' the job. So to get the scope of `$jobs` include the `use ($jobs)` in the function.
+With this you can call the method `Arr:first` to find the job, previously  include the module in the file with the `use Illuminate\Support\Arr;` or just use the `\Illuminate\Support\Arr::first` inline.
+`Arr:first` will return the first job in the array that matchs the condition of the `fn`.
+`fn` is a callback function that will be executed for each element in the array, like the arrow functions of javascript.
+```php
+fn($job) => $job['id'] == $id
+```
+This will return the first job that has the `id` equals to `$id`.
+
+The route returns a view to a new file called `job.blade.php`
+```php
+return view('job', [
+    'job' => $job
+]);
+```
+
+`resources/views/job.blade.php`
+```php
+<x-layout>
+    <x-slot:heading>
+        {{$job['title']}}
+    </x-slot:heading>
+    <section>
+        <h2>{{$job['company']}}</h2>
+        <p>{{$job['description']}}</p>
+        <span>{{$job['location']}}</span>
+        <span>{{$job['salary']}}</span>
+        <a href="{{$job['url']}}">Apply Now</a>
+    </section>
+</x-layout>
+```
+
+This will display the data of the `$job` variable using the `layout` previusly defined.
