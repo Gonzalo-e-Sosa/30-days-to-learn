@@ -33,6 +33,14 @@
         main {
             padding-inline: var(--padding-inline);
         }
+
+        @media screen and (max-width: 768px) {
+
+            header,
+            main {
+                padding-inline: calc(var(--padding-inline) / 2);
+            }
+        }
     </style>
 </body>
 
