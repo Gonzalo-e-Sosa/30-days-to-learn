@@ -1,7 +1,7 @@
 <x-layout>
     <x-slot:heading>
-        Home Page
+        {{$title}} Page
     </x-slot:heading>
-    
-    <h2>Hello from Home page</h1>
+
+    <h2>Hello from {{$title}} page</h1>
 </x-layout>
