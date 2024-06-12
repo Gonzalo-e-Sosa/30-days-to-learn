@@ -275,7 +275,7 @@ To display each attribute of the job use the `$job['name']` syntax.
 </li>
 ```
 
-Create a dinamic route to display a single job.
+Create a dynamic route to display a single job.
 
 `routes/web.php`
 ```php
@@ -288,7 +288,7 @@ Route::get('/jobs/{id}', function($id) use ($jobs){
 });
 ```
 
-Pay attention to the `{id}` included in the route, it means that the id will be dinamic. For example, if the id is `1` it will be the first job in the array with the route `/jobs/1`. If the id is `2` it will be the second job in the array with the route `/jobs/2`.
+Pay attention to the `{id}` included in the route, it means that the id will be dynamic. For example, if the id is `1` it will be the first job in the array with the route `/jobs/1`. If the id is `2` it will be the second job in the array with the route `/jobs/2`.
 
 To display the data of the job you need to 'find' the job. So to get the scope of `$jobs` include the `use ($jobs)` in the function.
 With this you can call the method `Arr:first` to find the job, previously  include the module in the file with the `use Illuminate\Support\Arr;` or just use the `\Illuminate\Support\Arr::first` inline.
